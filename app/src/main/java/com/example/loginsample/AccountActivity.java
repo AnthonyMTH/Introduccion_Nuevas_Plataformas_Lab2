@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +33,7 @@ public class AccountActivity extends AppCompatActivity {
 
         Button btnAceptar = findViewById(R.id.btnAceptar);
         Button btnCancelar = findViewById(R.id.btnCancelar);
-        EditText edtFirstName = findViewById(R.id.edtFirstname);
+        EditText edtFirstname = findViewById(R.id.edtFirstname);
         EditText edtLastname = findViewById(R.id.edtLastname);
         EditText edtEmail = findViewById(R.id.edtEmail);
         EditText edtPhone = findViewById(R.id.edtPhone);
@@ -41,23 +42,35 @@ public class AccountActivity extends AppCompatActivity {
 
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                AccountEntity accountEntity = new AccountEntity();
-                accountEntity.setFirstname(edtFirstName.getText().toString());
-                accountEntity.setLastname(edtLastname.getText().toString());
-                accountEntity.setEmail(edtEmail.getText().toString());
-                accountEntity.setPhone(edtPhone.getText().toString());
-                accountEntity.setUsername(edtUsername2.getText().toString());
-                accountEntity.setPassword(edtPassword2.getText().toString());
+            public void onClick(View v) {
+                String firstname = edtFirstname.getText().toString();
+                String lastname = edtLastname.getText().toString();
+                String email = edtEmail.getText().toString();
+                String phone = edtPhone.getText().toString();
+                String username = edtUsername2.getText().toString();
+                String password = edtPassword2.getText().toString();
 
-                Gson gson = new Gson();
-                String accountJson = gson.toJson(accountEntity);
+                if (firstname.isEmpty() || lastname.isEmpty() || email.isEmpty() || phone.isEmpty() || username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    AccountEntity accountEntity = new AccountEntity();
+                    accountEntity.setFirstname(edtFirstname.getText().toString());
+                    accountEntity.setLastname(edtLastname.getText().toString());
+                    accountEntity.setEmail(edtEmail.getText().toString());
+                    accountEntity.setPhone(edtPhone.getText().toString());
+                    accountEntity.setUsername(edtUsername2.getText().toString());
+                    accountEntity.setPassword(edtPassword2.getText().toString());
 
-                Intent data = new Intent();
-                data.putExtra(ACCOUNT_RECORD, accountJson);
+                    Gson gson = new Gson();
+                    String accountJson = gson.toJson(accountEntity);
 
-                setResult(ACCOUNT_ACEPTAR, data);
-                finish();
+                    Intent data = new Intent();
+                    data.putExtra(ACCOUNT_RECORD, accountJson);
+                    setResult(ACCOUNT_ACEPTAR, data);
+                    finish();
+                }
+
             }
         });
 
